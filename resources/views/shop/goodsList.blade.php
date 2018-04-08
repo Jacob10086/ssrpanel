@@ -12,15 +12,7 @@
 @section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('shop/goodsList')}}">商品管理</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-12">
@@ -28,23 +20,20 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption font-dark">
-                            <i class="icon-list font-dark"></i>
                             <span class="caption-subject bold uppercase"> 商品列表 </span>
                         </div>
                         <div class="actions">
                             <div class="btn-group">
-                                <button class="btn sbold blue" onclick="addGoods()"> 新增
-                                    <i class="fa fa-plus"></i>
-                                </button>
+                                <button class="btn sbold blue" onclick="addGoods()"> 添加商品 </button>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <div class="table-scrollable">
-                            <table class="table table-striped table-bordered table-hover table-checkable order-column">
+                        <div class="table-scrollable table-scrollable-borderless">
+                            <table class="table table-hover table-light">
                                 <thead>
                                 <tr>
-                                    <th> ID </th>
+                                    <th> # </th>
                                     <th> 名称 </th>
                                     <th> 类型 </th>
                                     <th> 图片 </th>
@@ -67,8 +56,8 @@
                                             <td> {{$goods->name}} </td>
                                             <td> {{$goods->type == 1 ? '流量包' : '套餐'}} </td>
                                             <td> @if($goods->logo) <a href="{{$goods->logo}}" class="fancybox"><img src="{{$goods->logo}}"/></a> @endif </td>
-                                            <td> {{$goods->traffic}} MiB</td>
-                                            <td> ￥{{$goods->price}} </td>
+                                            <td> {{$goods->traffic}} </td>
+                                            <td> {{$goods->price}} </td>
                                             <td> {{$goods->score}} </td>
                                             <td>
                                                 @if($goods->status)
@@ -78,8 +67,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-sm blue btn-outline" onclick="editGoods('{{$goods->id}}')">编辑</button>
-                                                <button type="button" class="btn btn-sm red btn-outline" onclick="delGoods('{{$goods->id}}')">删除</button>
+                                                <button type="button" class="btn btn-sm blue btn-outline" onclick="editGoods('{{$goods->id}}')"><i class="fa fa-pencil"></i></button>
+                                                <button type="button" class="btn btn-sm red btn-outline" onclick="delGoods('{{$goods->id}}')"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -107,7 +96,6 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/fancybox/source/jquery.fancybox.js" type="text/javascript"></script>
     <script src="/js/layer/layer.js" type="text/javascript"></script>
 
@@ -123,29 +111,16 @@
 
         // 删除商品
         function delGoods(id) {
-            bootbox.confirm({
-                message: "确定删除该商品？",
-                buttons: {
-                    confirm: {
-                        label: '确定',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: '取消',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: function (result) {
-                    if (result) {
-                        $.post("{{url('shop/delGoods')}}", {id:id, _token:'{{csrf_token()}}'}, function(ret) {
-                            layer.msg(ret.message, {time:1000}, function() {
-                                if (ret.status == 'success') {
-                                    window.location.reload();
-                                }
-                            });
-                        });
-                    }
-                }
+            layer.confirm('确定删除该商品？', {icon: 2, title:'警告'}, function(index) {
+                $.post("{{url('shop/delGoods')}}", {id:id, _token:'{{csrf_token()}}'}, function(ret) {
+                    layer.msg(ret.message, {time:1000}, function() {
+                        if (ret.status == 'success') {
+                            window.location.reload();
+                        }
+                    });
+                });
+
+                layer.close(index);
             });
         }
 

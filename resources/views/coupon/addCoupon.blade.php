@@ -7,18 +7,7 @@
 @section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('coupon/couponList')}}">卡券列表</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li>
-                <a href="{{url('coupon/addCoupon')}}">生成卡券</a>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-12">
@@ -35,27 +24,27 @@
                     </div>
                 @endif
                 <!-- BEGIN PORTLET-->
-                <div class="portlet light form-fit bordered">
+                <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-green sbold uppercase">生成卡券</span>
+                            <span class="caption-subject font-dark sbold uppercase">生成卡券</span>
                         </div>
                         <div class="actions"></div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        <form action="{{url('coupon/addCoupon')}}" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                        <form action="{{url('coupon/addCoupon')}}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
                             <div class="form-body">
                                 <div class="form-group">
                                     <label class="control-label col-md-3">卡券名称</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <input type="text" class="form-control" name="name" value="" id="name" placeholder="" required>
                                         <input type="hidden" name="_token" value="{{csrf_token()}}" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">LOGO</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-4">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
                                                 <img src="/assets/images/noimage.png" alt="" />
@@ -74,14 +63,18 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">类型</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mt-radio-inline">
                                             <label class="mt-radio">
-                                                <input type="radio" name="type" value="1" checked> 现金抵用券
+                                                <input type="radio" name="type" value="1" checked> 抵用券
                                                 <span></span>
                                             </label>
                                             <label class="mt-radio">
-                                                <input type="radio" name="type" value="2"> 折扣优惠券
+                                                <input type="radio" name="type" value="3"> 充值券
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="type" value="2"> 折扣券
                                                 <span></span>
                                             </label>
                                         </div>
@@ -89,7 +82,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">用途</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mt-radio-inline">
                                             <label class="mt-radio">
                                                 <input type="radio" name="usage" value="1" id="usage1" checked> 仅限一次性使用
@@ -104,7 +97,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">数量</label>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="num" value="{{Request::old('num')}}" id="num" placeholder="" required>
                                             <span class="input-group-addon">张</span>
@@ -113,7 +106,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">金额</label>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="amount" value="{{Request::old('amount')}}" id="amount" placeholder="" required>
                                             <span class="input-group-addon">元</span>
@@ -122,7 +115,7 @@
                                 </div>
                                 <div class="form-group hide">
                                     <label class="control-label col-md-3">折扣</label>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="discount" value="{{Request::old('discount')}}" id="discount" placeholder="">
                                             <span class="input-group-addon">折</span>
@@ -131,7 +124,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">有效期</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="input-group input-large input-daterange">
                                             <input type="text" class="form-control" name="available_start" value="{{Request::old('available_start')}}" id="available_start" required>
                                             <span class="input-group-addon"> 至 </span>
@@ -142,8 +135,8 @@
                             </div>
                             <div class="form-actions">
                                 <div class="row">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <button type="submit" class="btn green"> <i class="fa fa-check"></i> 提 交</button>
+                                    <div class="col-md-offset-3 col-md-4">
+                                        <button type="submit" class="btn green">提交</button>
                                     </div>
                                 </div>
                             </div>
@@ -178,17 +171,19 @@
         // 根据类型显示
         $("input[name='type']").change(function(){
             var type = $(this).val();
-            if (type == '1') {
+            if (type == '1' || type == '3') {
                 $("#amount").parent("div").parent("div").parent("div").removeClass("hide");
                 $("#discount").parent("div").parent("div").parent("div").addClass("hide");
-                $("#amount").attr('required', 'required');
+                $("#amount").prop('required', 'required');
                 $("#discount").removeAttr('required');
                 $("#discount").val('');
                 $("#usage2").parent("label").addClass("hide");
+                $("#usage1").prop('checked', 'checked');
+                $("#usage2").prop('checked', false);
             } else {
                 $("#amount").parent("div").parent("div").parent("div").addClass("hide");
                 $("#discount").parent("div").parent("div").parent("div").removeClass("hide");
-                $("#discount").attr('required', 'required');
+                $("#discount").prop('required', 'required');
                 $("#amount").removeAttr('required');
                 $("#amount").val('');
                 $("#usage2").parent("label").removeClass("hide");

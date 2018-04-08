@@ -3,22 +3,10 @@
 @section('css')
     <link href="/assets/pages/css/invoice-2.min.css" rel="stylesheet" type="text/css" />
 @endsection
-@section('title', '控制面板')
+@section('title', trans('home.panel'))
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('user/goodsList')}}">流量包</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li>
-                <a href="{{url('user/addOrder')}}">购买</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="invoice-content-2 bordered">
             <div class="row invoice-body">
@@ -26,21 +14,21 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th class="invoice-title uppercase"> 商品信息 </th>
-                            <th class="invoice-title uppercase text-center"> 单价 </th>
-                            <th class="invoice-title uppercase text-center"> 数量 </th>
-                            <th class="invoice-title uppercase text-center"> 小计 </th>
+                            <th class="invoice-title"> {{trans('home.service_name')}} </th>
+                            <th class="invoice-title text-center"> {{trans('home.service_price')}} </th>
+                            <th class="invoice-title text-center"> {{trans('home.service_quantity')}} </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td style="padding: 20px;">
-                                <h3>{{$goods->name}}</h3>
-                                <p> <img src="{{$goods->logo}}" style="width:100px; height:100px;"> 内含流量 {{$goods->traffic}} MiB，有效期 {{date('Y-m-d', strtotime($goods->start_time))}} ~ {{date('Y-m-d', strtotime($goods->end_time))}} </p>
+                            <td style="padding: 10px;">
+                                <h2>{{$goods->name}}</h2>
+                                {{trans('home.service_traffic')}} {{$goods->traffic}}
+                                <br/>
+                                {{trans('home.service_days')}} {{$goods->days}} {{trans('home.day')}}
                             </td>
-                            <td class="text-center sbold"> ￥{{$goods->price}} </td>
-                            <td class="text-center sbold"> x 1 </td>
-                            <td class="text-center sbold"> ￥{{$goods->price}} </td>
+                            <td class="text-center"> ￥{{$goods->price}} </td>
+                            <td class="text-center"> x 1 </td>
                         </tr>
                         </tbody>
                     </table>
@@ -48,36 +36,39 @@
             </div>
             <div class="row invoice-subtotal">
                 <div class="col-xs-3">
-                    <h2 class="invoice-title uppercase"> 共计 </h2>
+                    <h2 class="invoice-title"> {{trans('home.service_subtotal_price')}} </h2>
                     <p class="invoice-desc"> ￥{{$goods->price}} </p>
                 </div>
                 <div class="col-xs-3">
-                    <h2 class="invoice-title uppercase"> 优惠 </h2>
-                    <p class="invoice-desc">
-                        <div class="input-group">
-                            <input class="form-control" type="text" name="coupon_sn" id="coupon_sn" placeholder="优惠券" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" onclick="redeemCoupon()"><i class="fa fa-refresh"></i> 使用 </button>
-                            </span>
-                        </div>
-                    </p>
+                    <h2 class="invoice-title"> {{trans('home.service_total_price')}} </h2>
+                    <p class="invoice-desc grand-total"> ￥{{$goods->price}} </p>
                 </div>
                 <div class="col-xs-6">
-                    <h2 class="invoice-title uppercase"> 实际结算 </h2>
-                    <p class="invoice-desc grand-total"> ￥{{$goods->price}} </p>
+                    <h2 class="invoice-title"> {{trans('home.coupon')}} </h2>
+                    <p class="invoice-desc">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="coupon_sn" id="coupon_sn" placeholder="{{trans('home.coupon')}}" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" onclick="redeemCoupon()"><i class="fa fa-refresh"></i> {{trans('home.redeem_coupon')}} </button>
+                        </span>
+                    </div>
+                    </p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12">
-                    <a class="btn btn-lg green-haze hidden-print uppercase print-btn" onclick="addOrder()"> 支付 </a>
+                <div class="col-xs-12" style="text-align: right;">
+                    @if($is_youzan)
+                        <a class="btn btn-lg red hidden-print" onclick="onlinePay()"> 在线支付 </a>
+                    @endif
+                    <a class="btn btn-lg blue hidden-print uppercase" onclick="pay()"> {{trans('home.service_pay_button')}} </a>
                 </div>
             </div>
         </div>
         <!-- END PAGE BASE CONTENT -->
+    </div>
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="/js/layer/layer.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -92,8 +83,14 @@
                 async: false,
                 data: {_token:'{{csrf_token()}}', coupon_sn:coupon_sn},
                 dataType: 'json',
+                beforeSend: function () {
+                    index = layer.load(1, {
+                        shade: [0.7,'#CCC']
+                    });
+                },
                 success: function (ret) {
                     console.log(ret);
+                    layer.close(index);
                     $("#coupon_sn").parent().removeClass("has-error");
                     $("#coupon_sn").parent().removeClass("has-success");
                     $(".input-group-addon").remove();
@@ -107,6 +104,7 @@
                             total_price = goods_price * ret.data.discount;
                         } else {
                             total_price = goods_price - ret.data.amount;
+                            total_price = total_price > 0 ? total_price : 0;
                         }
 
                         $(".grand-total").text("￥" + total_price);
@@ -119,10 +117,49 @@
             });
         }
 
-        // 添加订单
-        function addOrder() {
+        // 在线支付
+        function onlinePay() {
             var goods_id = '{{$goods->id}}';
             var coupon_sn = $('#coupon_sn').val();
+
+            index = layer.load(1, {
+                shade: [0.7,'#CCC']
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "{{url('payment/create')}}",
+                async: false,
+                data: {_token:'{{csrf_token()}}', goods_id:goods_id, coupon_sn:coupon_sn},
+                dataType: 'json',
+                beforeSend: function () {
+                    index = layer.load(1, {
+                        shade: [0.7,'#CCC']
+                    });
+                },
+                success: function (ret) {
+                    layer.msg(ret.message, {time:1300}, function() {
+                        if (ret.status == 'success') {
+                            window.location.href = '{{url('payment')}}' + "/" + ret.data;
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                }
+                //complete: function () {
+                    //
+                //}
+            });
+        }
+
+        // 余额支付
+        function pay() {
+            var goods_id = '{{$goods->id}}';
+            var coupon_sn = $('#coupon_sn').val();
+
+            index = layer.load(1, {
+                shade: [0.7,'#CCC']
+            });
 
             $.ajax({
                 type: "POST",
@@ -130,10 +167,17 @@
                 async: false,
                 data: {_token:'{{csrf_token()}}', goods_id:goods_id, coupon_sn:coupon_sn},
                 dataType: 'json',
+                beforeSend: function () {
+                    index = layer.load(1, {
+                        shade: [0.7,'#CCC']
+                    });
+                },
                 success: function (ret) {
                     layer.msg(ret.message, {time:1300}, function() {
                         if (ret.status == 'success') {
                             window.location.href = '{{url('user/orderList')}}';
+                        } else {
+                            layer.close(index);
                         }
                     });
                 }

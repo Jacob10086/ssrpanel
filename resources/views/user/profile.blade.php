@@ -3,18 +3,10 @@
 @section('css')
     <link href="/assets/pages/css/profile.min.css" rel="stylesheet" type="text/css" />
 @endsection
-@section('title', '控制面板')
+@section('title', trans('home.panel'))
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('user/profile')}}">个人资料</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top: 0px; min-height: 354px;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-12">
@@ -36,12 +28,19 @@
                         <div class="col-md-12">
                             <div class="portlet light bordered">
                                 <div class="portlet-title tabbable-line">
+                                    <div class="caption caption-md">
+                                        <i class="icon-globe theme-font hide"></i>
+                                        <span class="caption-subject font-blue-madison bold uppercase">个人资料</span>
+                                    </div>
                                     <ul class="nav nav-tabs">
                                         <li class="active">
                                             <a href="#tab_1" data-toggle="tab">登录密码</a>
                                         </li>
                                         <li>
-                                            <a href="#tab_2" data-toggle="tab">SS(R)信息</a>
+                                            <a href="#tab_2" data-toggle="tab">联系方式</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab_3" data-toggle="tab">SSR(R)设置</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -70,13 +69,29 @@
                                         <div class="tab-pane" id="tab_2">
                                             <form action="{{url('user/profile')}}" method="post" enctype="multipart/form-data" class="form-bordered">
                                                 <div class="form-group">
-                                                    <label class="control-label"> 端口 </label>
-                                                    <input type="text" class="form-control" name="port" value="{{$info->port}}" id="port" readonly />
+                                                    <label class="control-label"> 微信 </label>
+                                                    <input type="text" class="form-control" name="wechat" value="{{$info->wechat}}" id="wechat" required />
                                                     <input type="hidden" name="_token" value="{{csrf_token()}}" />
                                                 </div>
                                                 <div class="form-group">
+                                                    <label class="control-label"> QQ </label>
+                                                    <input type="text" class="form-control" name="qq" value="{{$info->qq}}" id="qq" required />
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn green"> 提 交 </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane" id="tab_3">
+                                            <form action="{{url('user/profile')}}" method="post" enctype="multipart/form-data" class="form-bordered">
+                                                <div class="form-group">
                                                     <label class="control-label"> 连接密码 </label>
                                                     <input type="text" class="form-control" name="passwd" value="{{$info->passwd}}" id="passwd" required />
+                                                    <input type="hidden" name="_token" value="{{csrf_token()}}" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label"> 加密方式 </label>
@@ -104,7 +119,7 @@
                                                 </div>
                                                 <div class="form-actions">
                                                     <div class="row">
-                                                        <div class=" col-md-4">
+                                                        <div class="col-md-12">
                                                             <button type="submit" class="btn green"> 提 交 </button>
                                                         </div>
                                                     </div>

@@ -5,15 +5,7 @@
 @section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('admin/applyList')}}">提现管理</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-12">
@@ -59,7 +51,7 @@
                                         <th colspan="6">ID：{{$info->id}} | 申请人：{{$info->user->username}} | 提现金额：{{$info->amount}} | 申请时间：{{$info->created_at}}</th>
                                     </tr>
                                     <tr class="uppercase">
-                                        <th> ID </th>
+                                        <th> # </th>
                                         <th> 发生人 </th>
                                         <th> 发生订单 </th>
                                         <th> 发生金额 </th>
@@ -89,7 +81,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
-                                <div class="dataTables_info" role="status" aria-live="polite">共 {{$list->total()}} 个申请</div>
+                                <div class="dataTables_info" role="status" aria-live="polite">本申请共涉及 {{$list->total()}} 单</div>
                             </div>
                             <div class="col-md-8 col-sm-8">
                                 <div class="dataTables_paginate paging_bootstrap_full_number pull-right">
@@ -106,7 +98,6 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="/js/layer/layer.js" type="text/javascript"></script>
 
     <script type="text/javascript">

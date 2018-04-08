@@ -3,15 +3,14 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Models\Goods;
-use App\Http\Models\OrderGoods;
+use App\Http\Models\Order;
 use App\Http\Models\User;
 use Log;
 
 class AutoDecGoodsTrafficJob extends Command
 {
-    protected $signature = 'command:autoDecGoodsTrafficJob';
-    protected $description = '自动扣除到期流量包的流量';
+    protected $signature = 'autoDecGoodsTrafficJob';
+    protected $description = '自动扣除用户到期流量包的流量';
 
     public function __construct()
     {
@@ -20,28 +19,23 @@ class AutoDecGoodsTrafficJob extends Command
 
     public function handle()
     {
-        $orderGoods = OrderGoods::where('is_expire', 0)->get();
-        foreach ($orderGoods as $og) {
-            $goods = Goods::where('id', $og->goods_id)->first();
-            if (empty($goods)) {
-                continue;
-            }
-
-            // 如果商品已过期，则需要扣流量
-            if (date("Y-m-d H:i:s", strtotime("-" . $goods->days . " days")) >= $og->created_at) {
-                $u = User::where('id', $og->user_id)->first();
-                if (empty($u)) {
+        $orderList = Order::query()->with(['user', 'goods'])->where('is_expire', 0)->get();
+        if (!$orderList->isEmpty()) {
+            foreach ($orderList as $order) {
+                if (empty($order->user) || empty($order->goods)) {
                     continue;
                 }
 
-                // 商品到期自动扣总流量
-                if ($u->transfer_enable - $goods->traffic * 1048576 <= 0) {
-                    User::where('id', $og->user_id)->update(['transfer_enable' => 0]);
-                } else {
-                    User::where('id', $og->user_id)->decrement('transfer_enable', $goods->traffic * 1048576);
-                }
+                // 到期自动处理
+                if (date("Y-m-d H:i:s") >= $order->expire_at) {
+                    if ($order->user->transfer_enable - $order->goods->traffic * 1048576 <= 0) {
+                        User::query()->where('id', $order->user_id)->update(['transfer_enable' => 0]);
+                    } else {
+                        User::query()->where('id', $order->user_id)->decrement('transfer_enable', $order->goods->traffic * 1048576);
+                    }
 
-                OrderGoods::where('id', $og->id)->update(['is_expire' => 1]);
+                    Order::query()->where('oid', $order->oid)->update(['is_expire' => 1]);
+                }
             }
         }
 

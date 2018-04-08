@@ -8,7 +8,7 @@ use Log;
 
 class AutoExpireInviteJob extends Command
 {
-    protected $signature = 'command:autoExpireInviteJob';
+    protected $signature = 'autoExpireInviteJob';
     protected $description = '邀请码过期自动置无效';
 
     public function __construct()
@@ -18,10 +18,10 @@ class AutoExpireInviteJob extends Command
 
     public function handle()
     {
-        $inviteList = Invite::where('status', 0)->where('dateline', '<=', date('Y-m-d H:i:s'))->get();
+        $inviteList = Invite::query()->where('status', 0)->where('dateline', '<=', date('Y-m-d H:i:s'))->get();
         if (!$inviteList->isEmpty()) {
             foreach ($inviteList as $invite) {
-                Invite::where('id', $invite->id)->update(['status' => 2]);
+                Invite::query()->where('id', $invite->id)->update(['status' => 2]);
             }
         }
 

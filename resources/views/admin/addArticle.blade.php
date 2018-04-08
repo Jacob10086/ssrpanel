@@ -6,18 +6,7 @@
 @section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('admin/articleList')}}">文章管理</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li>
-                <a href="{{url('admin/addArticle')}}">添加文章</a>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-12">
@@ -28,22 +17,37 @@
                     </div>
                 @endif
                 <!-- BEGIN PORTLET-->
-                <div class="portlet light form-fit bordered">
+                <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-green sbold uppercase">添加文章</span>
+                            <span class="caption-subject font-dark sbold uppercase">添加文章</span>
                         </div>
                         <div class="actions"></div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        <form action="{{url('admin/addArticle')}}" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered" onsubmit="return do_submit();">
+                        <form action="{{url('admin/addArticle')}}" method="post" enctype="multipart/form-data" class="form-horizontal" onsubmit="return do_submit();">
                             <div class="form-body">
                                 <div class="form-group">
                                     <label class="control-label col-md-1">标题</label>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control" name="title" id="title" placeholder="" autofocus required>
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">类型</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="type" id="type">
+                                            <option value="1">文章</option>
+                                            <option value="2">公告</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">作者</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" name="author" id="author" placeholder="" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -55,15 +59,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-1">内容</label>
-                                    <div class="col-md-11">
+                                    <div class="col-md-10">
                                         <script id="editor" type="text/plain" style="height:400px;"></script>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-actions">
                                 <div class="row">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <button type="submit" class="btn green"> <i class="fa fa-check"></i> 提 交</button>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn green">提 交</button>
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +83,6 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="/js/ueditor/ueditor.config.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/ueditor/ueditor.all.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/layer/layer.js" type="text/javascript"></script>
@@ -100,6 +103,8 @@
         function do_submit() {
             var _token = '{{csrf_token()}}';
             var title = $('#title').val();
+            var type = $('#type').val();
+            var author = $('#author').val();
             var sort = $('#sort').val();
             var content = UE.getEditor('editor').getContent();
 
@@ -107,7 +112,7 @@
                 type: "POST",
                 url: "{{url('admin/addArticle')}}",
                 async: false,
-                data: {_token:_token, title: title, sort:sort, content:content},
+                data: {_token:_token, title: title, type:type, author:author, sort:sort, content:content},
                 dataType: 'json',
                 success: function (ret) {
                     layer.msg(ret.message, {time:1000}, function() {

@@ -13,12 +13,21 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        \App\Console\Commands\AutoBanSubscribeJob::class,
+        \App\Console\Commands\AutoBanUserJob::class,
+        \App\Console\Commands\AutoCheckNodeStatusJob::class,
+        \App\Console\Commands\AutoClearLogJob::class,
+        \App\Console\Commands\AutoCloseOrderJob::class,
         \App\Console\Commands\AutoDecGoodsTrafficJob::class,
         \App\Console\Commands\AutoDisableExpireUserJob::class,
+        \App\Console\Commands\AutoDisableUserJob::class,
         \App\Console\Commands\AutoExpireCouponJob::class,
         \App\Console\Commands\AutoExpireInviteJob::class,
-        //\App\Console\Commands\AutoGetLocationInfoJob::class,
+        \App\Console\Commands\AutoReleasePortJob::class,
+        \App\Console\Commands\AutoReopenUserJob::class,
         \App\Console\Commands\AutoResetUserTrafficJob::class,
+        \App\Console\Commands\AutoStatisticsNodeDailyTrafficJob::class,
+        \App\Console\Commands\AutoStatisticsNodeHourlyTrafficJob::class,
         \App\Console\Commands\AutoStatisticsUserDailyTrafficJob::class,
         \App\Console\Commands\AutoStatisticsUserHourlyTrafficJob::class,
         \App\Console\Commands\UserExpireWarningJob::class,
@@ -33,16 +42,25 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:autoDecGoodsTrafficJob')->everyTenMinutes();
-        $schedule->command('command:autoDisableExpireUserJob')->everyMinute();
-        $schedule->command('command:autoExpireCouponJob')->everyThirtyMinutes();
-        $schedule->command('command:autoExpireInviteJob')->everyThirtyMinutes();
-        //$schedule->command('command:autoGetLocationInfoJob')->everyMinute();
-        $schedule->command('command:autoResetUserTrafficJob')->monthly();
-        $schedule->command('command:autoStatisticsUserDailyTrafficJob')->dailyAt('04:00');
-        $schedule->command('command:autoStatisticsUserHourlyTrafficJob')->hourly();
-        $schedule->command('command:userExpireWarningJob')->daily();
-        $schedule->command('command:userTrafficWarningJob')->daily();
+        $schedule->command('autoBanSubscribeJob')->everyThirtyMinutes();
+        $schedule->command('autoBanUserJob')->everyTenMinutes();
+        $schedule->command('autoCheckNodeStatusJob')->everyMinute();
+        $schedule->command('autoClearLogJob')->everyThirtyMinutes();
+        $schedule->command('autoCloseOrderJob')->everyMinute();
+        $schedule->command('autoDecGoodsTrafficJob')->everyTenMinutes();
+        $schedule->command('autoDisableExpireUserJob')->everyMinute();
+        $schedule->command('autoDisableUserJob')->everyMinute();
+        $schedule->command('autoExpireCouponJob')->everyThirtyMinutes();
+        $schedule->command('autoExpireInviteJob')->everyThirtyMinutes();
+        $schedule->command('autoReleasePortJob')->everyMinute();
+        $schedule->command('autoReopenUserJob')->everyMinute();
+        $schedule->command('autoResetUserTrafficJob')->everyFiveMinutes();
+        $schedule->command('autoStatisticsNodeDailyTrafficJob')->dailyAt('04:30');
+        $schedule->command('autoStatisticsNodeHourlyTrafficJob')->hourly();
+        $schedule->command('autoStatisticsUserDailyTrafficJob')->dailyAt('03:00');
+        $schedule->command('autoStatisticsUserHourlyTrafficJob')->hourly();
+        $schedule->command('userExpireWarningJob')->daily();
+        $schedule->command('userTrafficWarningJob')->daily();
     }
 
     /**

@@ -3,15 +3,7 @@
 @section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('admin')}}">管理中心</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -21,7 +13,7 @@
                             <h3 class="font-green-soft">
                                 <span data-counter="counterup" data-value="{{$userCount}}"></span>
                             </h3>
-                            <small>账号</small>
+                            <small>用户</small>
                         </div>
                         <div class="icon">
                             <i class="icon-users"></i>
@@ -36,7 +28,7 @@
                             <h3 class="font-green-sharp">
                                 <span data-counter="counterup" data-value="{{$activeUserCount}}">0</span>
                             </h3>
-                            <small>活跃账号</small>
+                            <small>7日内活跃用户</small>
                         </div>
                         <div class="icon">
                             <i class="icon-user"></i>
@@ -51,7 +43,7 @@
                             <h3 class="font-green-sharp">
                                 <span data-counter="counterup" data-value="{{$onlineUserCount}}">0</span>
                             </h3>
-                            <small>当前在线数量</small>
+                            <small>当前在线</small>
                         </div>
                         <div class="icon">
                             <i class="icon-user"></i>
@@ -95,8 +87,21 @@
                 <div class="dashboard-stat2 bordered" onclick="skip('admin/trafficLog');">
                     <div class="display">
                         <div class="number">
+                            <h3 class="font-blue-sharp"> {{$totalFlowCount}} </h3>
+                            <small>总消耗流量</small>
+                        </div>
+                        <div class="icon">
+                            <i class="icon-speedometer"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="dashboard-stat2 bordered" onclick="skip('admin/trafficLog');">
+                    <div class="display">
+                        <div class="number">
                             <h3 class="font-blue-sharp"> {{$flowCount}} </h3>
-                            <small>消耗流量</small>
+                            <small>30日内消耗流量</small>
                         </div>
                         <div class="icon">
                             <i class="icon-speedometer"></i>
@@ -109,9 +114,9 @@
                     <div class="display">
                         <div class="number">
                             <h3 class="font-red">
-                                ￥<span data-counter="counterup" data-value="{{$totalBalance}}"></span>
+                                $<span data-counter="counterup" data-value="{{$totalBalance}}"></span>
                             </h3>
-                            <small>盈利</small>
+                            <small>总余额</small>
                         </div>
                         <div class="icon">
                             <i class="icon-diamond"></i>
@@ -126,7 +131,7 @@
                     <div class="display">
                         <div class="number">
                             <h3 class="font-green">
-                                ￥<span data-counter="counterup" data-value="{{$totalWaitRefAmount}}"></span>
+                                $<span data-counter="counterup" data-value="{{$totalWaitRefAmount}}"></span>
                             </h3>
                             <small>待提现佣金</small>
                         </div>
@@ -141,7 +146,7 @@
                     <div class="display">
                         <div class="number">
                             <h3 class="font-green">
-                                ￥<span data-counter="counterup" data-value="{{$totalRefAmount}}"></span>
+                                $<span data-counter="counterup" data-value="{{$totalRefAmount}}"></span>
                             </h3>
                             <small>已支出佣金</small>
                         </div>

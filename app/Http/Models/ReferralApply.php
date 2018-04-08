@@ -13,15 +13,6 @@ class ReferralApply extends Model
 {
     protected $table = 'referral_apply';
     protected $primaryKey = 'id';
-    protected $fillable = [
-        'user_id',
-        'before',
-        'after',
-        'amount',
-        'link_logs',
-        'status',
-        'created_at'
-    ];
 
     public function User()
     {

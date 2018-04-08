@@ -13,16 +13,23 @@ class Order extends Model
 {
     protected $table = 'order';
     protected $primaryKey = 'oid';
-    protected $fillable = [
-        'orderId',
-        'user_id',
-        'coupon_id',
-        'totalOriginalPrice',
-        'totalPrice',
-        'status'
-    ];
 
-    function goodsList() {
-        return $this->hasMany(OrderGoods::class, 'oid', 'oid');
+    function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    function goods()
+    {
+        return $this->hasOne(Goods::class, 'id', 'goods_id');
+    }
+
+    function coupon()
+    {
+        return $this->hasOne(Coupon::class, 'id', 'coupon_id');
+    }
+
+    function payment() {
+        return $this->hasOne(Payment::class, 'oid', 'oid');
     }
 }

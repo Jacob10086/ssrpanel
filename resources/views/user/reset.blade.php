@@ -26,7 +26,7 @@
     <!-- END PAGE LEVEL STYLES -->
     <!-- BEGIN THEME LAYOUT STYLES -->
     <!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}" />
 </head>
 
 <body class=" login">
@@ -51,7 +51,7 @@
                 <span> {{Session::get('successMsg')}} </span>
             </div>
         @endif
-        @if ($verify->status && empty(Session::get('errorMsg')) && empty(Session::get('successMsg')))
+        @if ($verify->status > 0 && empty(Session::get('errorMsg')) && empty(Session::get('successMsg')))
             <div class="alert alert-danger">
                 <button class="close" data-close="alert"></button>
                 <span> 该链接已失效 </span>

@@ -4,18 +4,10 @@
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 @endsection
-@section('title', '控制面板')
+@section('title', trans('home.panel'))
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('user/ticketList')}}">我的工单</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-12">
@@ -45,7 +37,7 @@
                                     <div class="timeline-body-arrow"></div>
                                     <div class="timeline-body-head">
                                         <div class="timeline-body-head-caption">
-                                            <span class="timeline-body-alerttitle font-blue-madison">我</span>
+                                            <span class="timeline-body-alerttitle font-blue-madison">{{trans('home.ticket_reply_me')}}</span>
                                             <span class="timeline-body-time font-grey-cascade"> {{$ticket->created_at}} </span>
                                         </div>
                                         <div class="timeline-body-head-actions"></div>
@@ -60,7 +52,7 @@
                                     <div class="timeline-item">
                                         <div class="timeline-badge">
                                             @if ($reply->user->is_admin)
-                                                <img class="timeline-badge-userpic" src="/assets/images/avatar.jpg">
+                                                <img class="timeline-badge-userpic" src="/assets/images/avatar.png">
                                             @else
                                                 <div class="timeline-icon">
                                                     <i class="icon-user font-green-haze"></i>
@@ -72,9 +64,9 @@
                                             <div class="timeline-body-head">
                                                 <div class="timeline-body-head-caption">
                                                     @if($reply->user->is_admin)
-                                                        <a href="javascript:;" class="timeline-body-title font-red-intense">管理员</a>
+                                                        <a href="javascript:;" class="timeline-body-title font-red-intense">{{trans('home.ticket_reply_master')}}</a>
                                                     @else
-                                                        <span class="timeline-body-alerttitle font-blue-madison">我</span>
+                                                        <span class="timeline-body-alerttitle font-blue-madison">{{trans('home.ticket_reply_me')}}</span>
                                                     @endif
                                                     <span class="timeline-body-time font-grey-cascade"> {{$reply->created_at}} </span>
                                                 </div>
@@ -93,7 +85,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <script id="editor" type="text/plain" style="padding-bottom:10px;"></script>
-                                    <button class="btn blue" type="button" onclick="replyTicket()"> 回 复 </button>
+                                    <button class="btn blue" type="button" onclick="replyTicket()"> {{trans('home.ticket_reply_button')}} </button>
                                 </div>
                             </div>
                         @endif
@@ -125,7 +117,6 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="/js/ueditor/ueditor.config.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/ueditor/ueditor.all.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/layer/layer.js" type="text/javascript"></script>

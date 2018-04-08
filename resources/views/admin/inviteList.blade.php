@@ -5,19 +5,11 @@
 @section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="{{url('admin/inviteList')}}">邀请码管理</a>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
+    <div class="page-content" style="padding-top:0;">
         <!-- BEGIN PAGE BASE CONTENT -->
         <div class="row">
             <div class="col-md-4">
-                <div class="tab-pane active" id="tab_0">
+                <div class="tab-pane active">
                     <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption">
@@ -41,6 +33,13 @@
                             <div class="caption">
                                 <span class="caption-subject font-dark bold uppercase">邀请码列表</span>
                             </div>
+                            <div class="actions">
+                                <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                    <button class="btn sbold blue" onclick="exportInvite()"> 批量导出
+                                        <i class="fa fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="portlet-body">
                             <div class="table-scrollable table-scrollable-borderless">
@@ -51,8 +50,8 @@
                                             <th> 邀请码 </th>
                                             <th> 有效期 </th>
                                             <th> 生成者 </th>
-                                            <th> 使用者 </th>
                                             <th> 状态 </th>
+                                            <th> 使用者 </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,10 +63,9 @@
                                             @foreach($inviteList as $invite)
                                                 <tr>
                                                     <td> {{$invite->id}} </td>
-                                                    <td> {{$invite->code}} </td>
+                                                    <td> <a href="{{url('register?aff='.Session::get('user')['id'].'&code='.$invite->code)}}" target="_blank">{{$invite->code}}</a> </td>
                                                     <td> {{$invite->dateline}} </td>
                                                     <td> {{empty($invite->generator) ? '【账号已删除】' : $invite->generator->username}} </td>
-                                                    <td> {{empty($invite->user) ? '' : $invite->user->username}} </td>
                                                     <td>
                                                         @if($invite->status == '0')
                                                             <span class="label label-sm label-success"> 未使用 </span>
@@ -77,6 +75,7 @@
                                                             <span class="label label-sm label-default"> 已过期 </span>
                                                         @endif
                                                     </td>
+                                                    <td> {{empty($invite->user) ? '' : $invite->user->username}} </td>
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -103,7 +102,6 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="/js/layer/layer.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -127,6 +125,11 @@
             });
 
             return false;
+        }
+
+        // 导出邀请码
+        function exportInvite() {
+            window.location.href = '{{url('admin/exportInvite')}}';
         }
     </script>
 @endsection

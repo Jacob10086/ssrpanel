@@ -13,32 +13,12 @@ class User extends Model
 {
     protected $table = 'user';
     protected $primaryKey = 'id';
-    protected $fillable = [
-        'username',
-        'password',
-        'port',
-        'passwd',
-        'transfer_enable',
-        'u',
-        'd',
-        't',
-        'enable',
-        'method',
-        'custom_method',
-        'protocol',
-        'protocol_param',
-        'obfs',
-        'obfs_param',
-        'gender',
-        'wechat',
-        'qq',
-        'usage',
-        'pay_way',
-        'balance',
-        'enable_time',
-        'expire_time',
-        'remark',
-        'is_admin',
-        'reg_ip'
-    ];
+
+    function payment() {
+        return $this->hasMany(Payment::class, 'user_id', 'id');
+    }
+
+    function label() {
+        return $this->hasMany(UserLabel::class, 'user_id', 'id');
+    }
 }
