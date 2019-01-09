@@ -5,9 +5,12 @@ namespace App\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 邮件发送日志
+ * 邮件/ServerChan发送日志
  * Class EmailLog
+ *
  * @package App\Http\Models
+ * @property-read \App\Http\Models\User $user
+ * @mixin \Eloquent
  */
 class EmailLog extends Model
 {
@@ -15,7 +18,4 @@ class EmailLog extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    function user() {
-        return $this->hasOne(User::class, 'id', 'user_id');
-    }
 }

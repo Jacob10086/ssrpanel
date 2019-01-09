@@ -1,10 +1,8 @@
 @extends('admin.layouts')
-
 @section('css')
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 @endsection
-@section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content" style="padding-top:0;">
@@ -25,7 +23,7 @@
                                 <a href="#tab3" data-toggle="tab"> 混淆 </a>
                             </li>
                             <li @if(Request::get('tab') == '4') class="active" @endif>
-                                <a href="#tab4" data-toggle="tab"> 账号等级 </a>
+                                <a href="#tab4" data-toggle="tab"> 等级 </a>
                             </li>
                             <li @if(Request::get('tab') == '5') class="active" @endif>
                                 <a href="#tab5" data-toggle="tab"> 国家地区 </a>
@@ -347,8 +345,6 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/js/layer/layer.js" type="text/javascript"></script>
-
     <script type="text/javascript">
         // modal关闭时刷新页面
         $(".modal").on("hidden.bs.modal", function () {

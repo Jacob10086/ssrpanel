@@ -1,10 +1,13 @@
 @extends('admin.layouts')
-
 @section('css')
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        input,select {
+            margin-bottom: 5px;
+        }
+    </style>
 @endsection
-@section('title', '控制面板')
 @section('content')
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content" style="padding-top:0;">
@@ -15,20 +18,27 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption font-dark">
-                            <span class="caption-subject bold uppercase">订阅请求日志</span>
+                            <span class="caption-subject bold uppercase">订阅管理</span>
                         </div>
                     </div>
                     <div class="portlet-body">
                         <div class="row">
-                            <div class="col-md-2 col-sm-2">
-                                <input type="text" class="col-md-4 form-control input-sm" name="user_id" value="{{Request::get('user_id')}}" id="user_id" placeholder="用户ID" onkeydown="if(event.keyCode==13){doSearch();}">
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <input type="text" class="col-md-4 form-control" name="user_id" value="{{Request::get('user_id')}}" id="user_id" placeholder="用户ID" onkeydown="if(event.keyCode==13){doSearch();}">
                             </div>
-                            <div class="col-md-2 col-sm-2">
-                                <input type="text" class="col-md-4 form-control input-sm" name="username" value="{{Request::get('username')}}" id="username" placeholder="用户名" onkeydown="if(event.keyCode==13){doSearch();}">
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <input type="text" class="col-md-4 form-control" name="username" value="{{Request::get('username')}}" id="username" placeholder="用户名" onkeydown="if(event.keyCode==13){doSearch();}">
                             </div>
-                            <div class="col-md-2 col-sm-2">
-                                <button type="button" class="btn btn-sm blue" onclick="doSearch();">查询</button>
-                                <button type="button" class="btn btn-sm grey" onclick="doReset();">重置</button>
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <select class="form-control" name="status" id="status" onChange="doSearch()">
+                                    <option value="" @if(Request::get('status') == '') selected @endif>状态</option>
+                                    <option value="0" @if(Request::get('status') == '0') selected @endif>禁用</option>
+                                    <option value="1" @if(Request::get('status') == '1') selected @endif>正常</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <button type="button" class="btn blue" onclick="doSearch();">查询</button>
+                                <button type="button" class="btn grey" onclick="doReset();">重置</button>
                             </div>
                         </div>
                         <div class="table-scrollable table-scrollable-borderless">
@@ -37,7 +47,7 @@
                                 <tr>
                                     <th> # </th>
                                     <th> 用户 </th>
-                                    <th> 唯一识别码 </th>
+                                    <th> 识别码 </th>
                                     <th> 请求次数 </th>
                                     <th> 最后请求时间 </th>
                                     <th> 封禁时间 </th>
@@ -54,7 +64,7 @@
                                         @foreach($subscribeList as $subscribe)
                                             <tr class="odd gradeX">
                                                 <td> {{$subscribe->id}} </td>
-                                                <td> {{$subscribe->user->username}} </td>
+                                                <td> {{empty($subscribe->user) ? '【账号已删除】' : $subscribe->user->username}} </td>
                                                 <td> {{$subscribe->code}} </td>
                                                 <td> {{$subscribe->times}} </td>
                                                 <td> {{$subscribe->updated_at}} </td>
@@ -94,15 +104,14 @@
     <!-- END CONTENT BODY -->
 @endsection
 @section('script')
-    <script src="/js/layer/layer.js" type="text/javascript"></script>
-
     <script type="text/javascript">
         // 搜索
         function doSearch() {
             var user_id = $("#user_id").val();
             var username = $("#username").val();
+            var status = $("#status option:checked").val();
 
-            window.location.href = '{{url('admin/subscribeLog')}}' + '?user_id=' + user_id + '&username=' + username;
+            window.location.href = '{{url('admin/subscribeLog')}}' + '?user_id=' + user_id + '&username=' + username + '&status=' + status;
         }
 
         // 重置

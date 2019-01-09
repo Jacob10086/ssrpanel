@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * 用户封禁日志
  * Class UserBanLog
+ *
  * @package App\Http\Models
+ * @property-read \App\Http\Models\User $User
+ * @mixin \Eloquent
  */
 class UserBanLog extends Model
 {

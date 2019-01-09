@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * 账号积分操作日志
  * Class UserScoreLog
+ *
  * @package App\Http\Models
+ * @property-read \App\Http\Models\User $User
+ * @mixin \Eloquent
  */
 class UserScoreLog extends Model
 {
